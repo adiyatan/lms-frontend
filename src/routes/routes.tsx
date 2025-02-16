@@ -9,6 +9,7 @@ import ModuleForm from "../components/module/ModuleForm";
 import MainLayout from "../components/MainLayout";
 import ParticipantList from "../components/participant/ParticipantList";
 import GroupChatList from "../components/groupChat/GroupChatList";
+import SpeakerList from "../components/speaker/SpeakerList";
 
 const AppRoutes: React.FC = () => {
   const isAuthenticated = useAuth();
@@ -29,7 +30,7 @@ const AppRoutes: React.FC = () => {
           <Route path="/modules/:id/edit" element={<ModuleForm />} />
           <Route path="/peserta" element={<ParticipantList />} />
           <Route path="/group-chat" element={<GroupChatList />} />
-          <Route path="/pemateri" element={<div>Pemateri Page</div>} />
+          <Route path="/pemateri" element={<SpeakerList />} />
         </Route>
       </Route>
       <Route path="*" element={<Navigate to="/login" replace />} />
