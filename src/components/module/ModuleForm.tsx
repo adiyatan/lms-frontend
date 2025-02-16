@@ -88,17 +88,20 @@ const ModuleForm: React.FC = () => {
             Authorization: `Bearer ${token}`,
           },
         });
+        alert("Module updated successfully!");
       } else {
         await axios.post("http://localhost:8000/api/modules", payload, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
+        alert("Module created successfully!");
       }
 
       navigate("/modules");
     } catch (error) {
       console.error("Failed to save module:", error);
+      alert("Failed to save module. Please try again.");
     }
   };
 

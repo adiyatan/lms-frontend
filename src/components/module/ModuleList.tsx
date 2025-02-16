@@ -68,9 +68,11 @@ const ModuleList: React.FC = () => {
           Authorization: `Bearer ${token}`,
         },
       });
+      alert("Module deleted successfully!");
       fetchModules(currentPage, searchTerm, perPage);
     } catch (error) {
       console.error("Failed to delete module:", error);
+      alert("Failed to delete module. Please try again.");
     }
   };
 
