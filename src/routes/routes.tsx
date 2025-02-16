@@ -6,6 +6,7 @@ import ProtectedRoute from "../components/ProtectedRoute";
 import useAuth from "../hooks/useAuth";
 import ModuleList from "../components/module/ModuleList";
 import ModuleForm from "../components/module/ModuleForm";
+import MainLayout from "../components/MainLayout";
 
 const AppRoutes: React.FC = () => {
   const isAuthenticated = useAuth();
@@ -19,13 +20,15 @@ const AppRoutes: React.FC = () => {
         }
       />
       <Route element={<ProtectedRoute />}>
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/modules" element={<ModuleList />} />
-        <Route path="/modules/create" element={<ModuleForm />} />
-        <Route path="/modules/:id/edit" element={<ModuleForm />} />
-        <Route path="/peserta" element={<div>Peserta Page</div>} />
-        <Route path="/group-chat" element={<div>Group Chat Page</div>} />
-        <Route path="/pemateri" element={<div>Pemateri Page</div>} />
+        <Route element={<MainLayout />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/modules" element={<ModuleList />} />
+          <Route path="/modules/create" element={<ModuleForm />} />
+          <Route path="/modules/:id/edit" element={<ModuleForm />} />
+          <Route path="/peserta" element={<div>Peserta Page</div>} />
+          <Route path="/group-chat" element={<div>Group Chat Page</div>} />
+          <Route path="/pemateri" element={<div>Pemateri Page</div>} />
+        </Route>
       </Route>
       <Route path="*" element={<Navigate to="/login" replace />} />
     </Routes>
