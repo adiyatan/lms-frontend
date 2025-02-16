@@ -1,50 +1,86 @@
-# React + TypeScript + Vite
+# Vite React Project
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project is a React application created with [Vite](https://vitejs.dev/), which provides a fast and modern development environment.
 
-Currently, two official plugins are available:
+## Requirements
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Ensure you have the following installed on your machine:
 
-## Expanding the ESLint configuration
+- **Node.js**: v22.13.0
+- **npm**: 10.9.2
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+You can verify your versions by running:
 
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+```sh
+node -v
+npm -v
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+## Getting Started
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+### 1. Clone the repository:
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+```sh
+git clone <repository-url>
+cd <project-directory>
 ```
+
+### 2. Install dependencies:
+
+```sh
+npm install
+```
+
+### 3. Start the development server:
+
+```sh
+npm run dev
+```
+
+The application will be accessible at `http://localhost:5173`.
+
+### 4. Build for production:
+
+```sh
+npm run build
+```
+
+This will generate production-ready files in the `dist` directory.
+
+### 5. Preview the production build:
+
+```sh
+npm run preview
+```
+
+## Project Structure
+
+```
+├── public/         # Static assets
+├── src/
+│   ├── assets/     # Images, icons, styles
+│   ├── components/ # Reusable components
+│   ├── hooks/      # Custom hooks
+│   ├── pages/      # Application pages
+│   ├── routes/     # Application routes
+│   ├── App.tsx     # Main application component
+│   └── main.tsx    # Entry point
+└── vite.config.js  # Vite configuration
+```
+
+## Scripts
+
+- `npm run dev`: Start the development server.
+- `npm run build`: Build the application for production.
+- `npm run preview`: Preview the production build.
+
+## Tech Stack
+
+- **React**: UI library
+- **Vite**: Build tool for fast development
+- **TypeScript (tsx)**: Type-safe JavaScript
+- **npm**: Package manager
+
+## License
+
+This project is licensed under the MIT License. Feel free to use it for your own projects!
