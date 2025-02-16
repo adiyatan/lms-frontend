@@ -7,6 +7,7 @@ import useAuth from "../hooks/useAuth";
 import ModuleList from "../components/module/ModuleList";
 import ModuleForm from "../components/module/ModuleForm";
 import MainLayout from "../components/MainLayout";
+import ParticipantList from "../components/participant/ParticipantList";
 
 const AppRoutes: React.FC = () => {
   const isAuthenticated = useAuth();
@@ -25,7 +26,7 @@ const AppRoutes: React.FC = () => {
           <Route path="/modules" element={<ModuleList />} />
           <Route path="/modules/create" element={<ModuleForm />} />
           <Route path="/modules/:id/edit" element={<ModuleForm />} />
-          <Route path="/peserta" element={<div>Peserta Page</div>} />
+          <Route path="/peserta" element={<ParticipantList />} />
           <Route path="/group-chat" element={<div>Group Chat Page</div>} />
           <Route path="/pemateri" element={<div>Pemateri Page</div>} />
         </Route>
