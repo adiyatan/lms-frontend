@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 
 interface Module {
   id: number;
   name: string;
   description: string;
-  materials: {
+  speaker: {
     id: number;
-    title: string;
-    schedule: string;
-    speaker: string;
-  }[];
+    name: string;
+    bio: string;
+    contact: string;
+  } | null;
 }
 
 interface ApiResponse {
@@ -27,18 +29,20 @@ const ModuleList: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [perPage, setPerPage] = useState(5);
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
 
   useEffect(() => {
-    fetchModules(currentPage);
-  }, [currentPage]);
+    fetchModules(currentPage, searchTerm, perPage);
+  }, [currentPage, searchTerm, perPage]);
 
-  const fetchModules = async (page: number) => {
+  const fetchModules = async (page: number, search = "", perPage = 5) => {
     setLoading(true);
     try {
       const response = await axios.get<ApiResponse>(
-        `http://localhost:8000/api/modules?page=${page}`,
+        `http://localhost:8000/api/modules?page=${page}&search=${search}&per_page=${perPage}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -64,7 +68,7 @@ const ModuleList: React.FC = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      fetchModules(currentPage);
+      fetchModules(currentPage, searchTerm, perPage);
     } catch (error) {
       console.error("Failed to delete module:", error);
     }
@@ -72,79 +76,116 @@ const ModuleList: React.FC = () => {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Modules</h1>
-      <button
-        onClick={() => navigate("/modules/create")}
-        className="bg-blue-500 text-white px-4 py-2 rounded mb-4"
-      >
-        Add Module
-      </button>
+      <h1 className="text-2xl font-bold mb-6">Modules</h1>
+
+      <div className="flex items-center justify-between mb-6">
+        <button
+          onClick={() => navigate("/modules/create")}
+          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+        >
+          Add Module
+        </button>
+
+        <div className="flex items-center gap-4">
+          <input
+            type="text"
+            placeholder="Search modules..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          />
+          <select
+            value={perPage}
+            onChange={(e) => setPerPage(Number(e.target.value))}
+            className="p-2 border border-gray-300 rounded-lg"
+          >
+            <option value={5}>5 per page</option>
+            <option value={10}>10 per page</option>
+            <option value={15}>15 per page</option>
+          </select>
+        </div>
+      </div>
+
       {loading ? (
         <p>Loading...</p>
       ) : (
         <>
-          <table className="w-full table-auto border-collapse border border-gray-200">
-            <thead>
-              <tr>
-                <th className="border px-4 py-2">ID</th>
-                <th className="border px-4 py-2">Name</th>
-                <th className="border px-4 py-2">Description</th>
-                <th className="border px-4 py-2">Materials</th>
-                <th className="border px-4 py-2">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {modules.map((module) => (
-                <tr key={module.id}>
-                  <td className="border px-4 py-2">{module.id}</td>
-                  <td className="border px-4 py-2">{module.name}</td>
-                  <td className="border px-4 py-2">{module.description}</td>
-                  <td className="border px-4 py-2">
-                    {module.materials.length > 0 ? (
-                      <ul className="list-disc ml-6">
-                        {module.materials.map((material) => (
-                          <li key={material.id}>
-                            <span className="font-medium">
-                              {material.title}
-                            </span>{" "}
-                            - {material.schedule} ({material.speaker})
-                          </li>
-                        ))}
-                      </ul>
-                    ) : (
-                      <span>No materials</span>
-                    )}
-                  </td>
-                  <td className="border px-4 py-2">
-                    <button
-                      onClick={() => navigate(`/modules/${module.id}/edit`)}
-                      className="text-blue-500 mr-2"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => handleDelete(module.id)}
-                      className="text-red-500"
-                    >
-                      Delete
-                    </button>
-                  </td>
+          <div className="overflow-x-auto bg-white shadow-md rounded-lg">
+            <table className="w-full table-auto border-collapse">
+              <thead className="bg-gray-100">
+                <tr>
+                  <th className="px-6 py-3 border-b text-gray-600 font-semibold">
+                    ID
+                  </th>
+                  <th className="px-6 py-3 border-b text-gray-600 font-semibold">
+                    Name
+                  </th>
+                  <th className="px-6 py-3 border-b text-gray-600 font-semibold">
+                    Description
+                  </th>
+                  <th className="px-6 py-3 border-b text-gray-600 font-semibold">
+                    Speaker
+                  </th>
+                  <th className="px-6 py-3 border-b text-gray-600 font-semibold">
+                    Actions
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-          {/* Pagination Controls */}
-          <div className="flex justify-between items-center mt-4">
+              </thead>
+              <tbody>
+                {modules.map((module) => (
+                  <tr key={module.id} className="odd:bg-gray-50 even:bg-white">
+                    <td className="px-6 py-3 border-b text-center">
+                      {module.id}
+                    </td>
+                    <td className="px-6 py-3 border-b">{module.name}</td>
+                    <td className="px-6 py-3 border-b">{module.description}</td>
+                    <td className="px-6 py-3 border-b">
+                      {module.speaker ? (
+                        <div>
+                          <p className="font-medium">{module.speaker.name}</p>
+                          <p className="text-sm text-blue-600">
+                            {module.speaker.contact}
+                          </p>
+                        </div>
+                      ) : (
+                        <span className="text-gray-500 italic">
+                          No speaker assigned
+                        </span>
+                      )}
+                    </td>
+                    <td className="px-6 py-3 border-b text-center">
+                      <button
+                        onClick={() => navigate(`/modules/${module.id}/edit`)}
+                        className="text-blue-500 hover:underline mr-2"
+                      >
+                        <FontAwesomeIcon icon={faEdit} />
+                      </button>
+                      <button
+                        onClick={() => handleDelete(module.id)}
+                        className="text-red-500 hover:underline"
+                      >
+                        <FontAwesomeIcon icon={faTrash} />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <div className="flex justify-between items-center mt-6">
             <button
               onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
               disabled={currentPage === 1}
               className={`px-4 py-2 rounded ${
-                currentPage === 1 ? "bg-gray-300" : "bg-blue-500 text-white"
+                currentPage === 1
+                  ? "bg-gray-300 text-gray-500"
+                  : "bg-gray-200 hover:bg-gray-300"
               }`}
             >
               Previous
             </button>
-            <span>
+            <span className="text-sm text-gray-600">
               Page {currentPage} of {totalPages}
             </span>
             <button
@@ -154,8 +195,8 @@ const ModuleList: React.FC = () => {
               disabled={currentPage === totalPages}
               className={`px-4 py-2 rounded ${
                 currentPage === totalPages
-                  ? "bg-gray-300"
-                  : "bg-blue-500 text-white"
+                  ? "bg-gray-300 text-gray-500"
+                  : "bg-gray-200 hover:bg-gray-300"
               }`}
             >
               Next
