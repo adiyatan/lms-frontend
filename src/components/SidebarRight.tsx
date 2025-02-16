@@ -17,7 +17,7 @@ const SidebarRight: React.FC = () => {
         />
         <h3 className="text-lg font-semibold">Selamat Datang, Juliana</h3>
         <p className="text-gray-600">
-          Di LMS by <span className="text-blue-600">LMS Pro</span>
+          Di LMS by <span className="text-blue-600">Adhivasindo</span>
         </p>
       </div>
       <div className="mb-6">

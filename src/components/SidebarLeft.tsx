@@ -52,7 +52,7 @@ const SidebarLeft: React.FC = () => {
   return (
     <div className="flex flex-col">
       <div className="w-64 bg-white text-black p-6">
-        <h1 className="text-xl font-bold">LMS PRO</h1>
+        <h1 className="text-xl font-bold">Adhivasindo</h1>
       </div>
       <aside className="w-64 bg-[#2C2A50] text-white p-6 flex flex-col">
         <nav className="space-y-4">
